@@ -10,7 +10,7 @@ int main( int /*argc*/ , char * /*argv*/[] )
   try
   {
     static const char script[ ] =
-      R""(
+      R"_(
 
       class Rectangle
       {
@@ -19,7 +19,7 @@ int main( int /*argc*/ , char * /*argv*/[] )
 
     var rect = Rectangle( );
 
-    )"";
+    )_";
 
 
     ch.eval( script );

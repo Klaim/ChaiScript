@@ -16,9 +16,9 @@ void log(const std::string &msg)
   std::cout << "[" << time(nullptr) << "] " << msg << '\n';
 }
 
-void log(const std::string &module, const std::string &msg)
+void log(const std::string &module_name, const std::string &msg)
 {
-  std::cout << "[" << time(nullptr) << "] <" << module << "> " << msg << '\n';
+  std::cout << "[" << time(nullptr) << "] <" << module_name << "> " << msg << '\n';
 }
 
 void bound_log(const std::string &msg)
@@ -41,7 +41,7 @@ struct System
 {
   std::map<std::string, std::function<std::string (const std::string &) > > m_callbacks;
 
-  void add_callback(const std::string &t_name, 
+  void add_callback(const std::string &t_name,
       const std::function<std::string (const std::string &)> &t_func)
   {
     m_callbacks[t_name] = t_func;
@@ -67,7 +67,7 @@ int main(int /*argc*/, char * /*argv*/[]) {
   using namespace chaiscript;
 
   ChaiScript chai;
-  
+
 
   //Create a new system object and share it with the chaiscript engine
   System system;
@@ -82,12 +82,12 @@ int main(int /*argc*/, char * /*argv*/[]) {
 
   chai.add(fun(&take_shared_ptr), "take_shared_ptr");
 
-  // Let's use chaiscript to add a new lambda callback to our system. 
+  // Let's use chaiscript to add a new lambda callback to our system.
   // The function "{ 'Callback1' + x }" is created in chaiscript and passed into our C++ application
-  // in the "add_callback" function of struct System the chaiscript function is converted into a 
+  // in the "add_callback" function of struct System the chaiscript function is converted into a
   // std::function, so it can be handled and called easily and type-safely
   chai.eval(R"(system.add_callback("#1", fun(x) { "Callback1 " + x });)");
-  
+
   // Because we are sharing the "system" object with the chaiscript engine we have equal
   // access to it both from within chaiscript and from C++ code
   system.do_callbacks("TestString");
@@ -106,7 +106,7 @@ int main(int /*argc*/, char * /*argv*/[]) {
   // A shortcut to using eval is just to use the chai operator()
   chai(R"(log("Test Module", "Test Message");)");
 
-  //Finally, it is possible to register a lambda as a system function, in this 
+  //Finally, it is possible to register a lambda as a system function, in this
   //way, we can, for instance add a bound member function to the system
   chai.add(fun([&system](){ return system.do_callbacks("Bound Test"); }), "do_callbacks");
 
@@ -138,7 +138,7 @@ int main(int /*argc*/, char * /*argv*/[]) {
 
   //To do: Add examples of handling Boxed_Values directly when needed
 
-  //Creating a functor on the stack and using it immediately 
+  //Creating a functor on the stack and using it immediately
   int x = chai.eval<std::function<int (int, int)> >("fun (x, y) { return x + y; }")(5, 6);
 
   std::stringstream ss;

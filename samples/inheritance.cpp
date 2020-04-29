@@ -78,7 +78,7 @@ int main()
   chai.add(chaiscript::user_type<BaseClass>(), "BaseClass");
   chai.add(chaiscript::user_type<ChaiScriptDerived>(), "ChaiScriptDerived");
 
-  std::string script = R""(
+  std::string script = R"_(
     def MakeDerived() {
       return ChaiScriptDerived(
           // create a dynamically created array and pass it in to the constructor
@@ -102,10 +102,10 @@ int main()
 
     var myderived := MakeDerived(); // avoid a copy by using reference assignment :=
 
-    )"";
+    )_";
 
   chai.eval(script);
-  
+
   BaseClass &myderived = chai.eval<ChaiScriptDerived&>("myderived");
 
   // at this point in the code myderived is both a ChaiScript variable and a C++ variable. In both cases
@@ -122,7 +122,7 @@ int main()
   assert(myderived.getValue() == "1234");
 
 
-  chai.eval(R"(myderived.setValue("new"))"); // set the value via chaiscript
+  chai.eval(R"_(myderived.setValue("new"))_"); // set the value via chaiscript
   assert(myderived.getValue() == "new");
 
   // call the other derived method via chaiscript and return the value to c++ land:
