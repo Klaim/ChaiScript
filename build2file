@@ -1,4 +1,4 @@
-# ./ : unittests/ samples/ performance_tests/
+./ : unittests/ samples/ # performance_tests/
 
 # Don't install tests.
 tests/: install = false
@@ -6,10 +6,6 @@ tests/: install = false
 
 # Documentation:
 ./ : doc{readme.md LICENSE license.txt cheatsheet.md description.txt releasenotes.md supporters.md}
-
-# workaround msvc preprocessor issue: https://lists.build2.org/archives/users/2018-March/000290.html
-if($cxx.id == 'msvc' && $cxx.version.major == 19 && $cxx.version.minor < 12)
-    ob{*} : cc.reprocess = true
 
 ############################################
 # Chaiscript library

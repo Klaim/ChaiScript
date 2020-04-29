@@ -13,3 +13,15 @@ cxx{*}: extension = cpp
 #
 test.target = $cxx.target
 
+# workaround msvc preprocessor issue: https://lists.build2.org/archives/users/2018-March/000290.html
+switch $cxx.target.class, $cxx.id
+{
+    case 'windows', 'msvc'
+    {
+        if($cxx.version.major == 19 && $cxx.version.minor < 12)
+            obj{*} : cc.reprocess = true
+
+        # See CMakeLists.txt
+        cxx.poptions += /bigobj /permissive-
+    }
+}
