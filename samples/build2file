@@ -6,4 +6,7 @@ for sample_cpp : cxx{*}
 {
     sample_name = $name($sample_cpp)
     ./ : exe{$sample_name} : $sample_cpp ../lib{chaiscript}
+
+    if(sample_name != 'example')
+        exe{$sample_name} : ../liba{stdlib parser}
 }
