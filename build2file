@@ -1,0 +1,51 @@
+# ./ : unittests/ samples/ performance_tests/
+
+# Don't install tests.
+tests/: install = false
+
+
+# Documentation:
+./ : doc{readme.md LICENSE license.txt cheatsheet.md description.txt releasenotes.md supporters.md}
+
+# workaround msvc preprocessor issue: https://lists.build2.org/archives/users/2018-March/000290.html
+if($cxx.id == 'msvc' && $cxx.version.major == 19 && $cxx.version.minor < 12)
+    ob{*} : cc.reprocess = true
+
+# Build options for all the code used below.
+cxx.poptions =+ "-I$src_root/include"
+
+
+############################################
+# Chaiscript library
+# Export options.
+#
+
+./ : lib{chaiscript} : {hxx}{include/**}
+
+lib{chaiscript}:
+{
+  cxx.export.poptions = "-I$src_root/include"
+  cxx.export.libs = $int_libs
+}
+
+# Install into the libdemo/ subdirectory of, say, /usr/include/
+# recreating subdirectories.
+#
+{hxx ixx txx}{*}:
+{
+  install         = include/libdemo/
+  install.subdirs = true
+}
+
+###############################################
+# Chai console
+
+./ : exe{chai} : src/cxx{main} liba{chaiscript_parser chaiscript_stdlib}
+
+###############################################
+# Chaiscript Extensions
+
+./ : lib{chaiscript_parser} : static_libs/{hxx cxx}{chaiscript_parser} lib{chaiscript}
+
+./ : lib{chaiscript_stdlib} : static_libs/{hxx cxx}{chaiscript_stdlib} lib{chaiscript}
+

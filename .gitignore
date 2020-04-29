@@ -3,3 +3,32 @@
 /buckaroo/
 .buckconfig.local
 BUCKAROO_DEPS
+
+################################
+# build2
+.bdep/
+# Local default options files.
+#
+.build2/local/
+
+# Compiler/linker output.
+#
+*.d
+*.t
+*.i
+*.ii
+*.o
+*.obj
+*.so
+*.dll
+*.a
+*.lib
+*.exp
+*.pdb
+*.ilk
+*.exe
+*.exe.dlls/
+*.exe.manifest
+*.pc
+
+###################################
