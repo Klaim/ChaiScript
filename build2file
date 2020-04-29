@@ -11,16 +11,12 @@ tests/: install = false
 if($cxx.id == 'msvc' && $cxx.version.major == 19 && $cxx.version.minor < 12)
     ob{*} : cc.reprocess = true
 
-# Build options for all the code used below.
-cxx.poptions =+ "-I$src_root/include"
-
-
 ############################################
 # Chaiscript library
 # Export options.
 #
 
-./ : lib{chaiscript} : {hxx}{include/**}
+./ : lib{chaiscript} : include/hxx{**}
 
 lib{chaiscript}:
 {
@@ -28,24 +24,29 @@ lib{chaiscript}:
   cxx.export.libs = $int_libs
 }
 
-# Install into the libdemo/ subdirectory of, say, /usr/include/
+# Install into the chaiscript/ subdirectory of, say, /usr/include/
 # recreating subdirectories.
 #
 {hxx ixx txx}{*}:
 {
-  install         = include/libdemo/
-  install.subdirs = true
+  install         = data_root/ # Files already under include/chaiscript will get installed in the right place...
+  install.subdirs = true # ... because we'll keep the directory tree.
 }
 
 ###############################################
 # Chai console
 
-./ : exe{chai} : src/cxx{main} liba{chaiscript_parser chaiscript_stdlib}
+./ : exe{chai} : src/cxx{main} lib{chaiscript} liba{parser stdlib}
 
 ###############################################
 # Chaiscript Extensions
 
-./ : lib{chaiscript_parser} : static_libs/{hxx cxx}{chaiscript_parser} lib{chaiscript}
+./ : liba{parser} : static_libs/{hxx cxx}{chaiscript_parser} lib{chaiscript}
+./ : liba{stdlib} : static_libs/{hxx cxx}{chaiscript_stdlib} lib{chaiscript}
+./ : libs{chaiscript_stdlib} : src/{cxx}{chaiscript_stdlib_module} lib{chaiscript}
 
-./ : lib{chaiscript_stdlib} : static_libs/{hxx cxx}{chaiscript_stdlib} lib{chaiscript}
-
+# Do not install headers from this subdirectory.
+static_libs/
+{
+    hxx{*} : install = false
+}
