@@ -1,5 +1,19 @@
+include ../
 
+# Unit Tests (mostly running chai)
 
-./ :
+for chai_script: file{**.chai}
+{
+    script_name = $name($chai_script)
+    script_extension = $name.extension($chai_script)
+    test_name = "unit.$script_name"
+    ./ : alias{$test_name} : ../exe{chai} testscript{chai}
+    # To understand the alias trick, see: https://app.slack.com/client/T21Q22G66/CDJ0Z991S
 
-
+    alias{$test_name}:
+    {
+      test = ../exe{chai}
+      test.arguments = $src_base/unit_test.inc $src_base/$script_name.$script_extension
+      needed_files =  $src_base/use.inc
+    }
+}

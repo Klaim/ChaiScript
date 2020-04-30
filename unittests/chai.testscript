@@ -1,0 +1,10 @@
+
+: run-with-success
+: Script must be read and execute without error.
+{
+    ln -s $needed_files $~/ ;
+    $* >-
+}
+
+
+
