@@ -1,4 +1,4 @@
-./ : unittests/ samples/ # performance_tests/
+./ : manifest unittests/ samples/ # performance_tests/
 
 # Don't install tests.
 tests/: install = false
