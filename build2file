@@ -34,6 +34,14 @@ lib{chaiscript}:
 
 ./ : exe{chai} : src/cxx{main} lib{chaiscript} liba{parser stdlib}
 
+if($cxx.target.class != 'windows')
+{
+    exe{chai}:
+    {
+        cxx.libs += -dl -pthread
+    }
+}
+
 ###############################################
 # Chaiscript Extensions
 
