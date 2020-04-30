@@ -30,7 +30,7 @@ not_light_tests = compiled_tests \
 
 for test_name : $not_light_tests
 {
-    ./ : exe{$test_name} : cxx{$test_name} ../lib{chaiscript}
+    ./ : exe{$test_name} : cxx{$test_name} hxx{catch} ../lib{chaiscript}
     exe{$test_name} : test = true
 }
 
