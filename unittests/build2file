@@ -17,3 +17,32 @@ for chai_script: file{**.chai}
       needed_files =  $src_base/use.inc
     }
 }
+
+# Additional Tests
+# TODO: make the following tests launch once per test (see CMakeLists.txt with the Catch dance)
+not_light_tests = compiled_tests \
+                static_chaiscript \
+                boxed_cast_test \
+                type_info_test \
+                c_linkage_test \
+                integer_literal_test \
+                multithreaded_test
+
+for test_name : $not_light_tests
+{
+    ./ : exe{$test_name} : cxx{$test_name} ../lib{chaiscript}
+    exe{$test_name} : test = true
+    info "Added test $test_name"
+}
+
+for test_name : compiled_tests c_linkage_test integer_literal_test
+{
+    exe{$test_name} : ../liba{parser stdlib}
+    info "Additionally $test_name"
+}
+
+# Multifile Tests
+exe{multifile_test} : {hxx cxx}{multifile_*} ../lib{chaiscript}
+exe{multifile_test} : test = true
+
+
