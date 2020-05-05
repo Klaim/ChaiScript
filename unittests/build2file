@@ -39,17 +39,9 @@ for test_name : compiled_tests c_linkage_test integer_literal_test
     exe{$test_name} : ../liba{parser stdlib}
 }
 
+exe{multithreaded_test} : cxx.libs += -pthread
+
 # Multifile Tests
 exe{multifile_test} : {hxx cxx}{multifile_*} ../lib{chaiscript}
 exe{multifile_test} : test = true
 
-
-
-# TODO: make that conditional on an option about thread-safety
-if($cxx.target.class != 'windows')
-{
-    exe{*}:
-    {
-        cxx.libs += -pthread
-    }
-}

@@ -17,7 +17,7 @@ tests/: install = false
 lib{chaiscript}:
 {
   cxx.export.poptions = "-I$src_root/include"
-  cxx.export.libs = $int_libs
+  cxx.export.libs = $int_libs -ldl
 }
 
 # Install into the chaiscript/ subdirectory of, say, /usr/include/
@@ -34,14 +34,6 @@ lib{chaiscript}:
 
 ./ : exe{chai} : src/cxx{main} lib{chaiscript} liba{parser stdlib}
 
-if($cxx.target.class != 'windows')
-{
-    exe{chai}:
-    {
-        cxx.libs += -dl -pthread
-    }
-}
-
 ###############################################
 # Chaiscript Extensions
 
@@ -55,6 +47,11 @@ static_libs/
 ./ : liba{stdlib} : static_libs/{hxx cxx}{chaiscript_stdlib} lib{chaiscript}
 
 ./ : libs{chaiscript_stdlib} : src/cxx{chaiscript_stdlib_module} lib{chaiscript}
+
+liba{stdlib} : 
+{
+    cxx.libs += -pthread
+}
 
 # Modules
 ./ : libs{test_module} : src/cxx{test_module} lib{chaiscript}
